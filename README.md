@@ -26,3 +26,13 @@
 | Bootstrap Icons| Icon set                     |
 
 --
+## 📸 Preview
+
+![UI Preview](./base.png)
+![UI Preview](./3.png)
+![UI Preview](./4.png)
+![UI Preview](./5.png)
+![UI Preview](./6.png)
+
+
+
