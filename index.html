@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flavora-Savour Authentic Delights</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="edddddddd.png">
+    <style>
+        body { font-family: 'Poppins', sans-serif; }
+        .hero-section {
+            background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), 
+                url('bg.jpeg');
+            background-size: cover;
+            background-position: center;
+        }
+        .city-card {
+            transition: transform 0.3s ease;
+        }
+        .city-card:hover {
+            transform: scale(1.05);
+        }
+        #toast {
+            display: none;
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body class="bg-white">
+    <!-- Toast Notification -->
+    <div id="toast" class="bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg">
+        <span id="toastMessage"></span>
+    </div>
+
+    <!-- Landing Page -->
+    <div id="landing" class="min-h-screen">
+        <div class="hero-section min-h-screen flex flex-col items-center justify-center text-white text-center px-4">
+            <h1 class="text-5xl font-bold mb-6">Welcome to <span style="color: yellow;">Flavora</span> </h1>
+            <p class="text-xl mb-8">Explore local flavors,  hidden gems, and
+                <span>culinary treasures in every corner of India</span> </p>
+            <div class="space-x-4">
+                <button onclick="showSection('login')" class="bg-yellow-400 hover:bg-yellow-500 text-black px-8 py-3 rounded-lg font-semibold">Login</button>
+                <button onclick="showSection('signup')" class="bg-transparent border-2 border-yellow-400 hover:bg-yellow-400 hover:text-black px-8 py-3 rounded-lg font-semibold">Sign Up</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Login Section -->
+    <div id="login" class="min-h-screen bg-gray-100 hidden">
+        <div class="container mx-auto px-4 py-16">
+            <div class="max-w-md mx-auto bg-white rounded-lg shadow-lg p-8">
+                <h2 class="text-3xl font-bold text-center mb-8">Login to Flavora</h2>
+                <form id="loginForm" class="space-y-6">
+                    <div>
+                        <label class="block text-gray-700 mb-2">Email</label>
+                        <input type="email" id="loginEmail" required class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-yellow-400">
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 mb-2">Password</label>
+                        <input type="password" id="loginPassword" required class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-yellow-400">
+                    </div>
+                    <button type="submit" class="w-full bg-yellow-400 hover:bg-yellow-500 text-black py-2 rounded-lg font-semibold">Login</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Signup Section -->
+    <div id="signup" class="min-h-screen bg-gray-100 hidden">
+        <div class="container mx-auto px-4 py-16">
+            <div class="max-w-md mx-auto bg-white rounded-lg shadow-lg p-8">
+                <h2 class="text-3xl font-bold text-center mb-8">Create Account</h2>
+                <form id="signupForm" class="space-y-6">
+                    <div>
+                        <label class="block text-gray-700 mb-2">Name</label>
+                        <input type="text" id="signupName" required class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-yellow-400">
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 mb-2">Email</label>
+                        <input type="email" id="signupEmail" required class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-yellow-400">
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 mb-2">Password</label>
+                        <input type="password" id="signupPassword" required class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-yellow-400">
+                    </div>
+                    <button type="submit" class="w-full bg-yellow-400 hover:bg-yellow-500 text-black py-2 rounded-lg font-semibold">Sign Up</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main App -->
+    <div id="main" class="hidden">
+        <!-- Navigation -->
+        <nav class="bg-white shadow-lg">
+            <div class="container mx-auto px-4">
+                <div class="flex justify-between items-center py-4">
+                    <h1 class="text-2xl font-bold text-yellow-400">Flavora</h1>
+                    <div class="relative">
+                        <button onclick="toggleDropdown()" class="text-gray-600 hover:text-yellow-400">
+                            <i class="bi bi-three-dots-vertical text-2xl"></i>
+                        </button>
+                        <div id="dropdown" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-xl z-20">
+                            <a href="#" class="block px-4 py-2 hover:bg-yellow-100">Profile</a>
+                            <a href="#" class="block px-4 py-2 hover:bg-yellow-100">Settings</a>
+                            <a href="#" onclick="logout()" class="block px-4 py-2 hover:bg-yellow-100">Logout</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Hero Search Section -->
+        <div class="relative h-[60vh]">
+            <div class="absolute inset-0">
+                <img src="https://images.unsplash.com/photo-1585032226651-759b368d7246?auto=format&fit=crop&q=80" 
+                     alt="Indian Street Food" 
+                     class="w-full h-full object-cover">
+                <div class="absolute inset-0 bg-black opacity-40"></div>
+            </div>
+            <div class="relative flex flex-col items-center justify-center h-full px-4">
+                <h2 class="text-4xl font-bold text-white mb-8 text-center">Discover Local  Street Food Paradise</h2>
+                <div class="w-full max-w-2xl">
+                    <input type="text" 
+                           id="searchInput" 
+                           placeholder="Search for a city..." 
+                           class="w-full px-6 py-4 rounded-lg text-lg focus:outline-none focus:ring-2 focus:ring-yellow-400">
+                </div>
+            </div>
+        </div>
+
+        <!-- City Cards Section -->
+        <div class="container mx-auto px-4 py-16">
+            <h3 class="text-2xl font-bold mb-8">Popular Destinations</h3>
+            <div class="grid grid-cols-3 grid-rows-2  gap-4 p-4">
+                <!-- Lucknow Card -->
+                <div class="city-card rounded-lg overflow-hidden shadow-lg cursor-pointer" onclick="showCityDetails('lucknow')">
+                    <img src="ghantaghar.jpg " 
+                         alt="Lucknow" 
+                         class="w-full h-48 object-cover">
+                    <div class="p-4">
+                        <h4 class="text-xl font-bold">Lucknow</h4>
+                        <p class="text-gray-600">Where Kebabs Meet Biryani Bliss!</p>
+                    </div>
+                </div>
+
+                <!-- Kanpur Card -->
+                <div class="city-card rounded-lg overflow-hidden shadow-lg cursor-pointer" onclick="showCityDetails('kanpur')">
+                    <img src="jk.jpg" 
+                         alt="Kanpur" 
+                         class="w-full h-48 object-cover">
+                    <div class="p-4">
+                        <h4 class="text-xl font-bold">Kanpur</h4>
+                        <p class="text-gray-600">Where thecha tingles and sweets tangle in delight!</p>
+                    </div>
+                </div>
+
+                <!-- Varanasi Card -->
+                <div class="city-card rounded-lg overflow-hidden shadow-lg cursor-pointer" onclick="showCityDetails('varanasi')">
+                    <img src="ghat.jpg" 
+                         alt="Varanasi" 
+                         class="w-full h-48 object-cover">
+                    <div class="p-4">
+                        <h4 class="text-xl font-bold">Varanasi</h4>
+                        <p class="text-gray-600">Where malaiyo floats and paan whispers tradition!</p>
+                    </div>
+                </div>
+
+                 <!-- Prayagraj Card -->
+                <div class="city-card rounded-lg overflow-hidden shadow-lg cursor-pointer" onclick="showCityDetails('prayagraj')">
+                <img src="sangam.jpg" 
+                     alt="Prayagraj" 
+                     class="w-full h-48 object-cover">
+                <div class="p-4">
+                    <h4 class="text-xl font-bold">Prayagraj</h4>
+                    <p class="text-gray-600">A soulful journey from crispy samosas to syrupy jalebis!</p>
+                </div>
+                </div>
+
+                <!-- Agra Card -->
+                <div class="city-card rounded-lg overflow-hidden shadow-lg cursor-pointer" onclick="showCityDetails('agra')">
+                <img src="taj.jpg" 
+                     alt="Agra" 
+                     class="w-full h-48 object-cover">
+                <div class="p-4">
+                    <h4 class="text-xl font-bold">Agra</h4>
+                    <p class="text-gray-600">A city where history lingers and petha sweetens every moment!</p>
+                </div>
+                </div>
+
+               <!-- Mathura Card -->
+               <div class="city-card rounded-lg overflow-hidden shadow-lg cursor-pointer" onclick="showCityDetails('Mathura')">
+                <img src="premm.jpg" 
+                     alt="mathura" 
+                     class="w-full h-48 object-cover">
+                <div class="p-4">
+                    <h4 class="text-xl font-bold">Mathura</h4>
+                    <p class="text-gray-600">The land of Krishna offers a feast of makkhan and peda!</p>
+                </div>
+                </div>
+            </div>
+
+           
+
+            <!-- Add Location Button -->
+            <div class="text-center mt-12">
+                <button onclick="showAddLocation()" 
+                        class="bg-yellow-400 hover:bg-yellow-500 text-black px-8 py-3 rounded-lg font-semibold">
+                    Add Your Favorite Spot
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- City Details Section -->
+    <div id="cityDetails" class="hidden">
+        <div class="relative h-[40vh]">
+            <img id="cityHeroImage" src="" alt="" class="w-full h-full object-cover">
+            <div class="absolute inset-0 bg-black opacity-40"></div>
+            <div class="absolute inset-0 flex items-center justify-center">
+                <h2 id="cityName" class="text-4xl font-bold text-white"></h2>
+            </div>
+            <button onclick="backToMain()" class="absolute top-4 left-4 text-white">
+                <i class="bi bi-arrow-left text-2xl"></i>
+            </button>
+        </div>
+
+        <!-- Filters -->
+        <div class="container mx-auto px-4 py-8">
+            <div class="flex flex-wrap gap-4 mb-8">
+                <button onclick="filterDishes('all')" class="px-4 py-2 rounded-full bg-yellow-400 hover:bg-yellow-500">All</button>
+                <button onclick="filterDishes('veg')" class="px-4 py-2 rounded-full border border-yellow-400 hover:bg-yellow-100">Veg</button>
+                <button onclick="filterDishes('non-veg')" class="px-4 py-2 rounded-full border border-yellow-400 hover:bg-yellow-100">Non-Veg</button>
+                <button onclick="filterDishes('sweet')" class="px-4 py-2 rounded-full border border-yellow-400 hover:bg-yellow-100">Sweet</button>
+                <button onclick="filterDishes('spicy')" class="px-4 py-2 rounded-full border border-yellow-400 hover:bg-yellow-100">Spicy</button>
+            </div>
+
+            <!-- Food Items Grid -->
+            <div id="foodItems" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Food items will be dynamically added here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Location Form -->
+    <div id="addLocation" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+        <div class="bg-white rounded-lg p-8 max-w-md w-full mx-4">
+            <h3 class="text-2xl font-bold mb-6">Add Your Favorite Spot</h3>
+            <form id="addLocationForm" class="space-y-4">
+                <div>
+                    <label class="block text-gray-700 mb-2">Location Name</label>
+                    <input type="text" required class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-yellow-400">
+                </div>
+                <div>
+                    <label class="block text-gray-700 mb-2">City</label>
+                    <input type="text" required class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-yellow-400">
+                </div>
+                <div>
+                    <label class="block text-gray-700 mb-2">Dish Name</label>
+                    <input type="text" required class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-yellow-400">
+                </div>
+                <div>
+                    <label class="block text-gray-700 mb-2">Upload Image</label>
+                    <input type="file" accept="image/*" required class="w-full">
+                </div>
+                <div class="flex justify-end space-x-4">
+                    <button type="button" onclick="hideAddLocation()" class="px-4 py-2 text-gray-600 hover:text-gray-800">Cancel</button>
+                    <button type="submit" class="px-6 py-2 bg-yellow-400 hover:bg-yellow-500 rounded-lg">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Database operations
+        const appSlug = 'flavora-app';
+        let userId = localStorage.getItem('userId') || 'user-' + Date.now();
+        localStorage.setItem('userId', userId);
+
+        // City data
+        const cityData = {
+            lucknow: {
+                name: 'Lucknow',
+                image: 'rumi darwaza.jpg',
+                dishes: [
+                {
+                        name: 'Deva Kebab Paratha',
+                        type: 'veg',
+                        image: 'kaathi roll.jpg',
+                        rating: 4.8,
+                        location: 'ganj'
+                    },
+                    {
+                        name: 'Sharma ki chai',
+                        type: 'veg',
+                        image: 'chai.jpg',
+                        rating: 4.8,
+                        location: 'ganj'
+                    },
+                    {
+                        name: 'Tunday Kebab',
+                        type: 'non-veg',
+                        image: 'https://images.unsplash.com/photo-1599487488170-d11ec9c172f0?auto=format&fit=crop&q=80',
+                        rating: 4.8,
+                        location: 'ganj'
+                    },
+                    {
+                        name: 'Idrees ki Biryani', 
+                        type: 'non-veg',
+                        image: 'idrees.jpg',
+                        rating: 4.9,
+                        location: 'ganj'
+                    },
+                    {
+                        name: 'Malai Makhan,Chowk',
+                        type: 'sweet',
+                        image: 'makkhan malai.jpg',
+                        rating: 4.5,
+                        location: 'ganj'
+                    }
+                ]
+            },
+            kanpur: {
+                name: 'Kanpur',
+                image: 'blue.jpg',
+                dishes: [
+                {
+                        name: 'Thagu ke laddoo',
+                        type: 'veg',
+                        image: 'laddoo.jpg',
+                        rating: 4.7,
+                        location: 'ganj'
+                    },
+                    {
+                        name: 'Bajpai Ke Chole Bhaturee',
+                        type: 'spicy',
+                        image: 'chhole.jpg',
+                        rating: 4.7,
+                        location: 'ganj'
+                    },
+                    {
+                        name: 'Shri Bholenath Chaat House',
+                        type: 'veg',
+                        image: 'kanpur chaat.jpg',
+                        rating: 4.7,
+                        location: 'ganj'
+                    },
+                    {
+                        name: 'Shri Kachori Bhandar',
+                        type: 'veg',
+                        image: 'kachori.jpg',
+                        rating: 4.9,
+                        location: 'ganj'
+                    },
+                    {
+                        name: 'Prakash Sweets and Namkeen',
+                        type: 'sweet',
+                        image: 'jaelbi.jpg',
+                        rating: 4.6,
+                        location: 'ganj'
+                    }
+                ]
+            },
+            varanasi: {
+                name: 'Varanasi',
+                image: 'https://images.unsplash.com/photo-1570168007204-dfb528c6958f?auto=format&fit=crop&q=80',
+                dishes: [
+                {
+                        name: 'Pehlwan Lassi',
+                        type: 'sweet',
+                        image: 'lassi.jpg',
+                        rating: 4.8,
+                        location: 'ganj'
+                    },
+                    {
+                        name: 'Vada Pav',
+                        type: 'veg',
+                        image: 'https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&q=80',
+                        rating: 4.8,
+                        location: 'ganj'
+                    },
+                    {
+                        name: 'Vada Pav',
+                        type: 'veg',
+                        image: 'https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&q=80',
+                        rating: 4.8,
+                        location: 'ganj'
+                    },
+                    {
+                        name: 'Pav Bhaji',
+                        type: 'veg',
+                        image: 'https://images.unsplash.com/photo-1606491956689-2ea866880c84?auto=format&fit=crop&q=80',
+                        rating: 4.7,
+                        location: 'ganj'
+                    },
+                    {
+                        name: 'Bhel Puri',
+                        type: 'veg',
+                        image: 'https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&q=80',
+                        rating: 4.6,
+                        location: 'ganj'
+                    }
+                ]
+            },
+            prayagraj: {
+                name: 'Prayagraj',
+                image: 'https://images.unsplash.com/photo-1570168007204-dfb528c6958f?auto=format&fit=crop&q=80',
+                dishes: [
+                {
+                        name: 'Vada Pav',
+                        type: 'veg',
+                        image: 'https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&q=80',
+                        rating: 4.8,
+                        location: 'ganj'
+                    },
+                    {
+                        name: 'Vada Pav',
+                        type: 'veg',
+                        image: 'https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&q=80',
+                        rating: 4.8,
+                        location: 'ganj'
+                    },
+                    {
+                        name: 'Vada Pav',
+                        type: 'veg',
+                        image: 'https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&q=80',
+                        rating: 4.8,
+                        location: 'ganj'
+                    },
+                    {
+                        name: 'Pav Bhaji',
+                        type: 'veg',
+                        image: 'https://images.unsplash.com/photo-1606491956689-2ea866880c84?auto=format&fit=crop&q=80',
+                        rating: 4.7,
+                        location: 'ganj'
+                    },
+                    {
+                        name: 'Bhel Puri',
+                        type: 'veg',
+                        image: 'https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&q=80',
+                        rating: 4.6,
+                        location: 'ganj'
+                    }
+                ]
+            },
+            agra: {
+                name: 'Agra',
+                image: 'https://images.unsplash.com/photo-1570168007204-dfb528c6958f?auto=format&fit=crop&q=80',
+                dishes: [
+                {
+                        name: 'Vada Pav',
+                        type: 'veg',
+                        image: 'https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&q=80',
+                        rating: 4.8,
+                        location: 'ganj'
+                    },
+                    {
+                        name: 'Vada Pav',
+                        type: 'veg',
+                        image: 'https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&q=80',
+                        rating: 4.8,
+                        location: 'ganj'
+                    },
+                    {
+                        name: 'Vada Pav',
+                        type: 'veg',
+                        image: 'https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&q=80',
+                        rating: 4.8,
+                        location: 'ganj'
+                    },
+                    {
+                        name: 'Pav Bhaji',
+                        type: 'veg',
+                        image: 'https://images.unsplash.com/photo-1606491956689-2ea866880c84?auto=format&fit=crop&q=80',
+                        rating: 4.7,
+                        location: 'ganj'
+                    },
+                    {
+                        name: 'Bhel Puri',
+                        type: 'veg',
+                        image: 'https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&q=80',
+                        rating: 4.6,
+                        location: 'ganj'
+                    }
+                ]
+            },
+            mathura: {
+                name: 'Mathura',
+                image: 'https://images.unsplash.com/photo-1570168007204-dfb528c6958f?auto=format&fit=crop&q=80',
+                dishes: [
+                {
+                        name: 'Vada Pav',
+                        type: 'veg',
+                        image: 'https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&q=80',
+                        rating: 4.8,
+                        location: 'ganj'
+                    },
+                    {
+                        name: 'Vada Pav',
+                        type: 'veg',
+                        image: 'https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&q=80',
+                        rating: 4.8,
+                        location: 'ganj'
+                    },
+                    {
+                        name: 'Vada Pav',
+                        type: 'veg',
+                        image: 'https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&q=80',
+                        rating: 4.8,
+                        location: 'ganj'
+                    },
+                    {
+                        name: 'Pav Bhaji',
+                        type: 'veg',
+                        image: 'https://images.unsplash.com/photo-1606491956689-2ea866880c84?auto=format&fit=crop&q=80',
+                        rating: 4.7,
+                        location: 'ganj'
+                    },
+                    {
+                        name: 'Bhel Puri',
+                        type: 'veg',
+                        image: 'https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&q=80',
+                        rating: 4.6,
+                        location: 'ganj'
+                    }
+                ]
+            }
+        };
+
+        // UI Functions
+        function showSection(section) {
+            document.querySelectorAll('#landing, #login, #signup, #main').forEach(el => el.classList.add('hidden'));
+            document.getElementById(section).classList.remove('hidden');
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            const toastMessage = document.getElementById('toastMessage');
+            toastMessage.textContent = message;
+            toast.style.display = 'block';
+            setTimeout(() => {
+                toast.style.display = 'none';
+            }, 3000);
+        }
+
+        function toggleDropdown() {
+            document.getElementById('dropdown').classList.toggle('hidden');
+        }
+
+        function logout() {
+            showSection('landing');
+            showToast('Logged out successfully');
+        }
+
+        function showCityDetails(city) {
+            const cityInfo = cityData[city];
+            document.getElementById('main').classList.add('hidden');
+            document.getElementById('cityDetails').classList.remove('hidden');
+            document.getElementById('cityHeroImage').src = cityInfo.image;
+            document.getElementById('cityName').textContent = cityInfo.name;
+            displayDishes(cityInfo.dishes);
+        }
+
+        function backToMain() {
+            document.getElementById('cityDetails').classList.add('hidden');
+            document.getElementById('main').classList.remove('hidden');
+        }
+
+        function displayDishes(dishes, filter = 'all') {
+            const container = document.getElementById('foodItems');
+            container.innerHTML = '';
+            
+            dishes.filter(dish => filter === 'all' || dish.type === filter).forEach(dish => {
+                container.innerHTML += `
+                    <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+                        <img src="${dish.image}" alt="${dish.name}" class="w-full h-48 object-cover">
+                        <div class="p-4">
+                            <div class="flex justify-between items-center mb-2">
+                                <h4 class="text-xl font-bold">${dish.name}</h4>
+                                <span class="text-yellow-400">
+                                    <i class="bi bi-star-fill"></i> ${dish.rating}
+                                </span>
+                            </div>
+                            <span class="inline-block px-2 py-1 rounded-full text-sm ${dish.type === 'veg' || dish.type === 'sweet' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}">
+                                ${dish.type}
+                            </span>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function filterDishes(type) {
+            const cityName = document.getElementById('cityName').textContent.toLowerCase();
+            displayDishes(cityData[cityName].dishes, type);
+        }
+
+        function showAddLocation() {
+            document.getElementById('addLocation').classList.remove('hidden');
+        }
+
+        function hideAddLocation() {
+            document.getElementById('addLocation').classList.add('hidden');
+        }
+
+        // Event Listeners
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            // Simulating login
+            showSection('main');
+            showToast('Logged in successfully');
+        });
+
+        document.getElementById('signupForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            // Simulating signup
+            showSection('main');
+            showToast('Account created successfully');
+        });
+
+        document.getElementById('addLocationForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            hideAddLocation();
+            showToast('Location added successfully');
+        });
+
+        document.getElementById('searchInput').addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase();
+            const cityCards = document.querySelectorAll('.city-card');
+            cityCards.forEach(card => {
+                const cityName = card.querySelector('h4').textContent.toLowerCase();
+                if (cityName.includes(searchTerm)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.relative')) {
+                document.getElementById('dropdown').classList.add('hidden');
+            }
+        });
+    </script>
+</body>
+</html>
